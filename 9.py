@@ -1,7 +1,7 @@
 import csv
 import numpy as np
 
-# Lists to store the followers and public repos of users from Delhi
+# Lists to store the followers and public repos of users from Austin
 followers = []
 public_repos = []
 
@@ -10,9 +10,9 @@ with open('users.csv', 'r', encoding='utf-8') as file:
     reader = csv.DictReader(file)
     
     for row in reader:
-        # Filter for users in Delhi
+        # Filter for users in Austin
         location = row.get('location', '').strip().lower()
-        if "delhi" in location:
+        if "austin" in location:
             # Get followers and public repositories values
             try:
                 followers_count = int(row['followers'])
