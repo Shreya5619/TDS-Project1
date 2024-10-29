@@ -9,7 +9,7 @@ with open('users.csv', 'r', encoding='utf-8') as file:
     for row in reader:
         location = row['location'].strip().lower()
         # Check if the user is from Delhi
-        if 'delhi' in location:
+        if 'austin' in location:
             users_in_austin.append({
                 'login': row['login'],
                 'followers': int(row['followers'])
