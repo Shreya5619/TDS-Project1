@@ -1,0 +1,34 @@
+login,name,company,location,email,hireable,bio,public_repos,followers,following,created_at
+getify,Kyle Simpson,GETIFY SOLUTIONS,"Austin, TX",getify@gmail.com,True,Kyle Simpson is a Human-Centric Technologist. He's fighting for the people behind the pixels.,69,43932,2,2009-11-08T06:56:21Z
+benawad,Ben Awad,VOIDPET,"Austin, TX",,,"React.js, Typescript, Node.js, PostgreSQL",254,29015,4,2014-06-12T15:55:20Z
+steveklabnik,Steve Klabnik,OXIDECOMPUTER,"Austin, TX",steve@steveklabnik.com,,All i'm trying to do is enjoy every day to the fullest with my Pokémon.,832,6803,206,2008-10-06T17:40:28Z
+cloudflare,Cloudflare,,"San Francisco, London, Austin, Lisbon, Singapore",,,,475,6433,0,2010-06-25T01:24:59Z
+jbogard,Jimmy Bogard,"JIMMY BOGARD CONSULTING, LLC","Austin, TX",jimmy.bogard@gmail.com,,"The Barley Architect, Architect Consultant",139,5945,3,2009-07-13T18:05:22Z
+EvanBacon,Evan Bacon,EXPO,Austin TX,baconbrix@gmail.com,,Building 𝝠 Expo • Follow me on 𝕏 for updates 🥓,302,4592,90,2014-11-10T22:01:21Z
+progrium,Jeff Lindsay,PROGRIUM TECHNOLOGY COMPANY,"Austin, TX",progrium@gmail.com,,,260,3807,93,2008-02-22T20:00:53Z
+oracle,Oracle,,"Austin, TX",opensource_ww_grp@oracle.com,,Open Source at Oracle,285,3713,0,2013-05-14T18:05:13Z
+GeostatsGuy,Michael Pyrcz,UTAUSTIN,"Austin, TX, USA",mpyrcz@austin.utexas.edu,True,"Full Professor at The University of Texas at Austin working on 
+Spatial Data Analytics, Geostatistics and Machine Learning",43,3413,12,2017-09-17T19:47:38Z
+benlesh,Ben Lesh,,"Austin, TX",ben@benlesh.com,,,153,2853,43,2012-03-15T14:24:15Z
+ContinuumIO,"Anaconda, Inc. (formerly Continuum Analytics, Inc.)",,"Austin, TX",info@anaconda.com,,"Advanced data processing, analysis, and visualization tools for Python & R.",182,2533,0,2011-10-28T20:03:07Z
+davatron5000,Dave Rupert,PARAVEL,"Austin, TX",,,Co-founder of Luro. Lead developer at Paravel. Co-host of ShopTalkShow. Purveyor of tiny jQueries.,59,2477,41,2008-12-23T03:50:27Z
+schneems,Richard Schneeman,SCHNEEMS,"Austin, Tx",richard.schneeman+no-recruiters@gmail.com,,"Ruby core contributor. Learn how to contribute to open source with my app CodeTriage (free) and my book How to Open Source (paid), links below 👇🏻",481,2431,4,2009-03-03T16:11:07Z
+wardviaene,Edward Viaene,IN4IT,"Austin, TX",,,,54,2372,3,2014-05-27T08:21:28Z
+mikermcneil,Mike McNeil,FLEET (@FLEETDM),"Austin, Texas",,,"CEO, Fleet.  Creator & BDFL, sails.js",223,2340,281,2011-02-14T20:51:12Z
+SlexAxton,Alex Sexton,STRIPE,"Austin, TX",,,<script>alert(1)</script>,137,2284,40,2009-06-18T05:23:06Z
+kentonv,Kenton Varda,CLOUDFLARE,"Austin, TX",kenton@cloudflare.com,,"Tech lead of Cloudflare Workers, Cap'n Proto, Sandstorm.io.",46,2111,2,2013-03-29T02:36:56Z
+pfrazee,Paul Frazee,BLUESKY,"Austin, TX",pfrazee@gmail.com,,Developer at Bluesky,249,2051,15,2011-12-17T20:02:32Z
+dhg,Dave Gamache,,Austin,,,,14,1920,4,2011-03-27T20:03:19Z
+aweary,Brandon Dail,DISCORD,"Austin, TX",,,"Staff Engineer at @discord working on Design Systems and Accessibility. Previously @facebook, @FormidableLabs. Helped maintain @reactjs once upon a time.",268,1844,227,2014-03-07T18:19:20Z
+hdm,HD Moore,RUNZEROINC,"Austin, TX",,,,32,1841,6,2011-11-04T03:08:58Z
+mrocklin,Matthew Rocklin,COILED,"Austin, TX",,True,,258,1804,0,2010-06-16T02:36:34Z
+JessicaSachs,Jess,IONIC-TEAM,"Austin, TX",jess@jessicasachs.io,,"Senior Engineer @herodevs
+
+Prev: @stenciljs @cypress-io, @vuejs Test Utils. Occasional contributor to @vueuse @vitest-dev",167,1548,44,2012-11-15T02:24:19Z
+codinghemp,William Smith,,America/Austin,,,I am a hacker and not a criminal or unethical techie; I see the world differently and I  want to learn how technology works and use it for positive purposes.,18,1533,5836,2022-09-27T08:28:27Z
+srowen,Sean Owen,DATABRICKS,"Austin, TX",sean.owen@databricks.com,,"Applied research @ Mosaic @ Databricks. Formerly Principal DS/ML Specialist @ Databricks.  Apache Spark PMC / committer. Primary author, zxing and Oryx project.",14,1498,1,2011-06-01T08:17:49Z
+ruotianluo,Ruotian(RT) Luo,WAYMO,Austin,rluo@ttic.edu,True,Waymo Perception SWE. Phd graduate from TTIC.,112,1473,445,2015-11-25T20:38:37Z
+aaronabramov,Aaron Abrams,,"Austin, TX",,,,132,1455,66,2011-07-26T17:17:44Z
+pry0cc,pry0cc,,"Austin, TX",,True,Inventor of Axiom,111,1370,37,2013-05-03T19:58:45Z
+teoliphant,Travis E. Oliphant,"QUANSIGHT, OPENTEAMS","Austin, TX",teoliphant@gmail.com,True,"NumPy, SciPy, Numba, Conda, PyData, NumFocus, Anaconda, Quansight, OpenTeams",33,1227,25,2010-04-27T21:53:47Z
+PaulRashidi,Paul Rashidi,GOOGLE,"Austin, TX, USA",,,,6,1201,2,2010-10-12T22:08:27Z
