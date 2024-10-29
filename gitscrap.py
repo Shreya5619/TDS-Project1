@@ -1,158 +1,202 @@
 import requests
-from google.colab import userdata
 import pandas as pd
-import os
-from dotenv import load_dotenv
+import time
+import logging
+from typing import List, Dict, Any
 
-API=userdata.get('API')
+class GitHubScraper:
+    def __init__(self, token: str):
+        """
+        Initialize the GitHub scraper with your API token.
+        
+        Args:
+            token (str): GitHub Personal Access Token
+        """
+        self.headers = {
+            'Authorization': f'token {token}',
+            'Accept': 'application/vnd.github.v3+json'
+        }
+        self.base_url = 'https://api.github.com'
+        
+        # Setup logging
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
+        self.logger = logging.getLogger(__name__)
 
-load_dotenv()
-GITHUB_TOKEN = os.getenv(API)
-headers = {
-    "Authorization": f"Bearer {API}",
-    "X-GitHub-Api-Version": "2022-11-28"
-}
-page = 1 
-users=[]
-while True:
-    
-    params = {
-        'q': 'location:Austin followers:>100',
-        'per_page': 100,
-        'page': page
-    }
-    
-    response = requests.get(url = 'https://api.github.com/search/users'
-, headers=headers, params=params)
-    data = response.json()
-    
-    
-    if 'items' not in data or not data['items']:
-        break
-    
-    
-    for item in data['items']:
-        user_url = item['url']
-        user_data = requests.get(user_url, headers=headers).json()
-        users.append(user_data)
-    
-    
-    print(f"Fetched page {page}, total users collected: {len(users)}")
-    page += 1
+    def _make_request(self, url: str, params: dict = None) -> Dict:
+        """
+        Make a request to the GitHub API with rate limit handling.
+        """
+        while True:
+            response = requests.get(url, headers=self.headers, params=params)
+            
+            if response.status_code == 200:
+                return response.json()
+            elif response.status_code == 403:
+                reset_time = int(response.headers.get('X-RateLimit-Reset', 0))
+                sleep_time = max(reset_time - time.time(), 0) + 1
+                self.logger.warning(f"Rate limit hit. Sleeping for {sleep_time} seconds")
+                time.sleep(sleep_time)
+            else:
+                self.logger.error(f"Error {response.status_code}: {response.text}")
+                response.raise_for_status()
 
+    def clean_company_name(self, company: str) -> str:
+        """
+        Clean up company names according to specifications.
+        """
+        if not company:
+            return ""
+        
+        # Strip whitespace and @ symbol
+        cleaned = company.strip().lstrip('@')
+        
+        # Convert to uppercase
+        return cleaned.upper()
+
+    def search_users(self, location: str, min_followers: int) -> List[Dict]:
+        """
+        Search for GitHub users in a specific location with minimum followers.
+        """
+        users = []
+        page = 1
+        
+        while True:
+            self.logger.info(f"Fetching users page {page}")
+            
+            query = f"location:{location} followers:>={min_followers}"
+            params = {
+                'q': query,
+                'per_page': 100,
+                'page': page
+            }
+            
+            url = f"{self.base_url}/search/users"
+            response = self._make_request(url, params)
+            
+            if not response['items']:
+                break
+                
+            for user in response['items']:
+                user_data = self._make_request(user['url'])
+                
+                # Extract only the required fields with exact matching names
+                cleaned_data = {
+                    'login': user_data['login'],
+                    'name': user_data['name'] if user_data['name'] else "",
+                    'company': self.clean_company_name(user_data.get('company')),
+                    'location': user_data['location'] if user_data['location'] else "",
+                    'email': user_data['email'] if user_data['email'] else "",
+                    'hireable': user_data['hireable'] if user_data['hireable'] is not None else False,
+                    'bio': user_data['bio'] if user_data['bio'] else "",
+                    'public_repos': user_data['public_repos'],
+                    'followers': user_data['followers'],
+                    'following': user_data['following'],
+                    'created_at': user_data['created_at']
+                }
+                
+                users.append(cleaned_data)
+                
+            page += 1
+            
+        return users
+
+    def get_user_repositories(self, username: str, max_repos: int = 500) -> List[Dict]:
+        """
+        Get repositories for a specific user.
+        """
+        repos = []
+        page = 1
+        
+        while len(repos) < max_repos:
+            self.logger.info(f"Fetching repositories for {username}, page {page}")
+            
+            params = {
+                'sort': 'pushed',
+                'direction': 'desc',
+                'per_page': 100,
+                'page': page
+            }
+            
+            url = f"{self.base_url}/users/{username}/repos"
+            response = self._make_request(url, params)
+            
+            if not response:
+                break
+                
+            for repo in response:
+                # Extract only the required fields with exact matching names
+                repo_data = {
+                    'login': username,  # Adding owner's login as required
+                    'full_name': repo['full_name'],
+                    'created_at': repo['created_at'],
+                    'stargazers_count': repo['stargazers_count'],
+                    'watchers_count': repo['watchers_count'],
+                    'language': repo['language'] if repo['language'] else "",
+                    'has_projects': repo['has_projects'],
+                    'has_wiki': repo['has_wiki'],
+                    'license_name': repo['license']['key'] if repo.get('license') else ""
+                }
+                
+                repos.append(repo_data)
+                
+            if len(response) < 100:
+                break
+                
+            page += 1
+            
+        return repos[:max_repos]
+
+def main():
+    # Get GitHub token
+    token = input("Enter your GitHub token: ").strip()
+    if not token:
+        print("Token is required. Exiting...")
+        return
+
+    # Initialize scraper
+    scraper = GitHubScraper(token)
     
-    if response.headers.get('X-RateLimit-Remaining') == '0':
-        reset_time = int(response.headers.get('X-RateLimit-Reset', 0))
-        sleep_time = max(reset_time - time.time(), 0) + 1
-        print(f"Rate limit hit. Sleeping for {sleep_time} seconds.")
-        time.sleep(sleep_time)
-
-def clean_company_name(name):
-    if name:
-        return name.strip().lstrip("@").upper()
-    return ""
-
-def format_user_data(users):
-    formatted_users = []
+    # Search for users in Delhi with >100 followers
+    users = scraper.search_users(location='austin', min_followers=100)
+    
+    # Save users to CSV
+    users_df = pd.DataFrame(users)
+    users_df.to_csv('users.csv', index=False)
+    
+    # Get repositories for each user
+    all_repos = []
     for user in users:
-        formatted_users.append({
-            "login": user.get("login", ""),
-            "name": user.get("name", ""),
-            "company": clean_company_name(user.get("company", "")),
-            "location": user.get("location", ""),
-            "email": user.get("email", ""),
-            "hireable": user.get("hireable", ""),
-            "bio": user.get("bio", ""),
-            "public_repos": user.get("public_repos", 0),
-            "followers": user.get("followers", 0),
-            "following": user.get("following", 0),
-            "created_at": user.get("created_at", "")
-        })
-    return formatted_users
-formatted_users = format_user_data(users)
+        repos = scraper.get_user_repositories(user['login'])
+        all_repos.extend(repos)
+    
+    # Save repositories to CSV
+    repos_df = pd.DataFrame(all_repos)
+    repos_df.to_csv('repositories.csv', index=False)
+    
+    print(f"Scraped {len(users)} users and {len(all_repos)} repositories")
+    
+    # Create README.md
+    with open('README.md', 'w') as f:
+        f.write(f"""# GitHub Users in Delhi
 
-logins = [item['login'] for item in formatted_users]
+This repository contains data about GitHub users in Delhi with over 100 followers and their repositories.
 
-def get_user_repositories(logins):
-    repo_data = []
-    for login in logins:
-      repos_url = f"https://api.github.com/users/{login}/repos?per_page=500"
-      repos_response = requests.get(repos_url, headers=headers)
-      repos = repos_response.json()
-      for repo in repos:
-          license_name = repo["license"]["key"] if repo["license"] else ""
-          repo_data.append({
-              "login": login,
-              "full_name": repo.get("full_name", ""),
-              "created_at": repo.get("created_at", ""),
-              "stargazers_count": repo.get("stargazers_count", 0),
-              "watchers_count": repo.get("watchers_count", 0),
-              "language": repo.get("language", ""),
-              "has_projects": repo.get("has_projects", False),
-              "has_wiki": repo.get("has_wiki", False),
-              "license_name": license_name
-          })
-    return repo_data
-rep=get_user_repositories(logins)
+## Files
 
-users_df = pd.DataFrame(formatted_users)
-repos_df = pd.DataFrame(rep)
+1. `users.csv`: Contains information about {len(users)} GitHub users in Delhi with over 100 followers
+2. `repositories.csv`: Contains information about {len(all_repos)} public repositories from these users
+3. `gitscrap.py`: Python script used to collect this data
 
-from matplotlib import pyplot as plt
-import seaborn as sns
+## Data Collection
 
-# Create subplots
-fig, axs = plt.subplots(1, 3, figsize=(18, 6))  # Adjust size as needed
+- Data collected using GitHub API
+- Date of collection: {time.strftime('%Y-%m-%d')}
+- Only included users with 100+ followers
+- Up to 500 most recently pushed repositories per user
+""")
 
-# 1. Histogram of followers
-axs[0].hist(users_df['followers'], bins=20, color='skyblue', edgecolor='black')
-axs[0].set_title('Distribution of Followers')
-axs[0].set_xlabel('Number of Followers')
-axs[0].set_ylabel('Frequency')
-axs[0].spines[['top', 'right']].set_visible(False)
-
-# 2. Horizontal bar chart of hireable status
-users_df.groupby('hireable').size().plot(kind='barh', color=sns.color_palette('Dark2'), ax=axs[1])
-axs[1].set_title('Number of Hireable Users')
-axs[1].set_xlabel('Count')
-axs[1].spines[['top', 'right']].set_visible(False)
-
-# 3. Histogram of public repositories
-axs[2].hist(users_df['public_repos'], bins=20, color='salmon', edgecolor='black')
-axs[2].set_title('Distribution of Public Repositories')
-axs[2].set_xlabel('Number of Public Repositories')
-axs[2].set_ylabel('Frequency')
-axs[2].spines[['top', 'right']].set_visible(False)
-
-plt.tight_layout()
-plt.show()
-
-from matplotlib import pyplot as plt
-import seaborn as sns
-
-fig, axs = plt.subplots(1, 2, figsize=(18, 6))
-
-# 1. Scatterplot of stargazers count vs watchers count
-stargazers = repos_df['stargazers_count']
-watchers = repos_df['watchers_count']
-axs[0].scatter(stargazers, watchers, alpha=0.5, color='purple')
-axs[0].set_title('Stargazers vs Watchers')
-axs[0].set_xlabel('Number of Stargazers')
-axs[0].set_ylabel('Number of Watchers')
-axs[0].set_xscale('log')
-axs[0].set_yscale('log')
-axs[0].grid()
-
-# 2. Pie chart for programming languages
-language_counts = repos_df['language'].value_counts()
-
-axs[1].pie(language_counts, labels=language_counts.index, autopct='%1.1f%%', startangle=140, colors=sns.color_palette("Set2"))
-axs[1].set_title('Distribution of Programming Languages in Repositories')
-axs[1].axis('equal')
-
-
-plt.tight_layout()
-plt.show()
-#converting dataframe to csv and then saving
-users_df.to_csv("users.csv", index=False)
-repos_df.to_csv("repositories.csv", index=False)
+if __name__ == "__main__":
+    main()
