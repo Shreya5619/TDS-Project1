@@ -1,7 +1,7 @@
 import csv
 
 # Define the list to store users from Delhi
-users_in_delhi = []
+users_in_austin = []
 
 # Read the CSV file with UTF-8 encoding
 with open('users.csv', 'r', encoding='utf-8') as file:
@@ -10,13 +10,13 @@ with open('users.csv', 'r', encoding='utf-8') as file:
         location = row['location'].strip().lower()
         # Check if the user is from Delhi
         if 'delhi' in location:
-            users_in_delhi.append({
+            users_in_austin.append({
                 'login': row['login'],
                 'followers': int(row['followers'])
             })
 
 # Sort users based on followers in descending order
-top_users = sorted(users_in_delhi, key=lambda x: x['followers'], reverse=True)
+top_users = sorted(users_in_austin, key=lambda x: x['followers'], reverse=True)
 
 # Extract the top 5 user logins
 top_5_logins = [user['login'] for user in top_users[:5]]
