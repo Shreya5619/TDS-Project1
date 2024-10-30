@@ -1,20 +1,13 @@
-<<<<<<< HEAD
-# GitHub Users in Delhi
+**•An explanation of how I scraped the data:** With the power of GitHub’s API, I zeroed in on Austin's tech-savvy GitHub users, each boasting over 100 followers. I collected a treasure trove of details—from professional bios to preferred programming languages—shedding light on Austin’s coding culture.
 
-This repository contains data about GitHub users in Delhi with over 100 followers and their repositories.
+**•:The most interesting and surprising fact I found after analyzing the the data** The most interesting finding was the concentration of popular repositories in languages like JavaScript, Python, and Go.
 
-## Files
-=======
-**•An explanation of how I scraped the data:** With the power of GitHub’s API, we zeroed in on Austin's tech-savvy GitHub users, each boasting over 100 followers. We collected a treasure trove of details—from professional bios to preferred programming languages—shedding light on Austin’s coding culture.
->>>>>>> 624ca0e879284a7595f00bc0d558e2511ae171d3
+**•An actionable recommendation for developers based on my analysis:**Based on the data, developers targeting Austin should consider showcasing expertise in these languages.
 
+
+Here is an explaination of the project files
 1. `users.csv`: Contains information about 476 GitHub users in Delhi with over 100 followers
 2. `repositories.csv`: Contains information about 41299 public repositories from these users
 3. `gitscrap.py`: Python script used to collect this data
 
-## Data Collection
-
-- Data collected using GitHub API
-- Date of collection: 2024-10-29
-- Only included users with 100+ followers
-- Up to 500 most recently pushed repositories per user
+The most interesting and surprising fact you found after analyzing the the data
