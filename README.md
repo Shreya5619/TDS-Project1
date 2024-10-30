@@ -10,4 +10,3 @@ Here is an explaination of the project files
 2. `repositories.csv`: Contains information about 41299 public repositories from these users
 3. `gitscrap.py`: Python script used to collect this data
 
-The most interesting and surprising fact you found after analyzing the the data
